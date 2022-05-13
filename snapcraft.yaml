@@ -1,0 +1,41 @@
+name: gathertown
+version: 0.0.1
+summary: A better way to meet.
+description: |
+  Electron wrapper for Gather Town
+base: core20
+confinement: strict
+grade: stable
+
+apps:
+  gathertown:
+    command: gathertown/gathertown --no-sandbox
+    extensions: [gnome-3-38]
+    plugs:
+    - browser-support
+    - network
+    - network-bind
+    - audio-playback
+    - audio-record
+    - camera
+    - home
+    environment:
+      # Correct the TMPDIR path for Chromium Framework/Electron to ensure
+      # libappindicator has readable resources.
+      TMPDIR: $XDG_RUNTIME_DIR
+
+parts:
+  gathertown:
+    plugin: nil
+    source: .
+    override-build: |
+        npm install
+        npm run build:package
+        cp -rv ./out/gathertown-linux-* $SNAPCRAFT_PART_INSTALL/gathertown
+    build-snaps:
+    - node/16/stable
+    build-packages:
+    - unzip
+    stage-packages:
+    - libnss3
+    - libnspr4
