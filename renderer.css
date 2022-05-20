@@ -58,3 +58,28 @@
     width: 100%;
     overflow: hidden;
 }
+
+#snap-dev-tools {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 11px;
+    font-family: monospace;
+    color: #fff;
+    background: #000;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 5px;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    z-index: 99999;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    line-height: 0;
+    opacity: 0.4;
+}
+
+#snap-dev-tools:hover {
+    opacity: 1;
+}

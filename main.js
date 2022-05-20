@@ -5,6 +5,7 @@ const { app, BrowserWindow, desktopCapturer, ipcMain } = require("electron");
 const path = require("path");
 
 const createWindow = () => {
+  let devtoolsOpen = false;
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1024,
@@ -36,6 +37,26 @@ const createWindow = () => {
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools();
+
+  ipcMain.handle("TOGGLE_DEV_TOOLS", async (event, opts) => {
+    if (!devtoolsOpen) {
+      mainWindow.webContents.openDevTools();
+    } else {
+      mainWindow.webContents.closeDevTools();
+    }
+  });
+
+  mainWindow.webContents.on("devtools-opened", () => {
+    devtoolsOpen = true;
+    // setImmediate(() => {
+    //     // do whatever you want to do after dev tool completely opened here
+
+    // });
+  });
+
+  mainWindow.webContents.on("devtools-closed", () => {
+    devtoolsOpen = false;
+  });
 };
 
 // This method will be called when Electron has finished

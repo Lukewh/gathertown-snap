@@ -16,3 +16,7 @@ window.addEventListener("DOMContentLoaded", () => {
 contextBridge.exposeInMainWorld("myCustomGetDisplayMedia", async () => {
   return await ipcRenderer.invoke("DESKTOP_CAPTURER_GET_SOURCES");
 });
+
+contextBridge.exposeInMainWorld("toggleDevTools", async () => {
+  return await ipcRenderer.invoke("TOGGLE_DEV_TOOLS");
+});
