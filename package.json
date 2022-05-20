@@ -1,13 +1,12 @@
 {
   "name": "gathertown",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "A better way to meet.",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron . --ignore-certificate-errors",
-    "build:package": "npx electron-packager . --out=out --overwrite --platform=linux --output=release-build --prune=true",
-    "build:snap": "npx electron-installer-snap --src=out/gathertown-linux-x64"
+    "start": "electron .",
+    "build:package": "npx electron-packager . --out=out --overwrite --platform=linux --output=release-build --prune=true"
   },
   "author": "LukeWH",
   "license": "MIT",

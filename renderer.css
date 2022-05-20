@@ -1,0 +1,60 @@
+#snap-source-selector {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    background: rgba(0,0,0,0.8);
+    flex-direction: column;
+    margin: 20px;
+    border-radius: 20px;
+    border: 1px solid #000;
+    padding: 20px;
+    overflow: auto;
+}
+
+#snap-source-selector .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 40px;
+    cursor: pointer;
+    color: #fff;
+}
+
+#snap-source-selector h4 {
+    font-size: 30px;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+#snap-source-selector .screens,
+#snap-source-selector .windows {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#snap-source-selector .source {
+    width: 200px;
+    height: 200px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    border: 1px solid #fff;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+}
+#snap-source-selector .source:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+#snap-source-selector .source .name {
+    width: 100%;
+    overflow: hidden;
+}

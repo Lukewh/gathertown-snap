@@ -1,7 +1,7 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, desktopCapturer, ipcMain } = require("electron");
 const path = require("path");
 
 const createWindow = () => {
@@ -10,8 +10,9 @@ const createWindow = () => {
     width: 1024,
     height: 768,
     title: "Gather | A better way to meet.",
+    logo: "./gather-logo.svg",
     webPreferences: {
-      nodeIntegration: false,
+      preload: path.join(__dirname, "preload.js"),
     },
     show: false,
     backgroundColor: "rgb(40, 45, 78)",
@@ -31,8 +32,10 @@ const createWindow = () => {
     mainWindow.show();
   });
 
+  mainWindow.removeMenu();
+
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -57,3 +60,18 @@ app.on("window-all-closed", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.handle("DESKTOP_CAPTURER_GET_SOURCES", async (event, opts) => {
+  try {
+    const sources = await desktopCapturer.getSources({
+      types: ["window", "screen"],
+    });
+
+    return sources.map((source) => ({
+      ...source,
+      thumbnail_data: source.thumbnail.toDataURL(),
+    }));
+  } catch (e) {
+    console.error(e);
+  }
+});
