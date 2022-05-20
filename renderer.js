@@ -147,3 +147,17 @@ const createSourceEl = (source) => {
     el: wrapper,
   };
 };
+
+const addDevToggle = async () => {
+  const devToolsButton = document.createElement("div");
+  devToolsButton.setAttribute("id", "snap-dev-tools");
+  devToolsButton.innerText = ">_";
+
+  devToolsButton.addEventListener("click", () => {
+    window.toggleDevTools();
+  });
+
+  document.body.appendChild(devToolsButton);
+};
+
+addDevToggle();
