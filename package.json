@@ -1,16 +1,14 @@
 {
   "name": "gathertown",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A better way to meet.",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build:package": "npx electron-packager . --out=out --overwrite --platform=linux --output=release-build --prune=true"
+    "dist": "electron-builder --linux snap"
   },
-  "author": "LukeWH",
-  "license": "MIT",
   "devDependencies": {
-    "electron": "^18.2.3"
+    "electron": "18.2.4",
+    "electron-builder": "23.0.3"
   }
 }
