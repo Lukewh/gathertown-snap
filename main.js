@@ -47,8 +47,11 @@ const createWindow = () => {
 
   // Deal with external links
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
-    return { action: "deny" };
+    if (url.startsWith("http")) {
+      shell.openExternal(url);
+      return { action: "deny" };
+    }
+    return { action: "allow" };
   });
 
   ipcMain.handle("TOGGLE_DEV_TOOLS", async (event, opts) => {
