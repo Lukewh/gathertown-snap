@@ -1,7 +1,13 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, desktopCapturer, ipcMain } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  desktopCapturer,
+  ipcMain,
+  shell,
+} = require("electron");
 const path = require("path");
 
 const createWindow = () => {
@@ -11,7 +17,8 @@ const createWindow = () => {
     width: 1024,
     height: 768,
     title: "Gather | A better way to meet.",
-    logo: "./gather-logo.svg",
+    logo: `${__dirname}/gather-logo.svg`,
+    icon: `${__dirname}/gather-logo.svg`,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -37,6 +44,12 @@ const createWindow = () => {
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools();
+
+  // Deal with external links
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: "deny" };
+  });
 
   ipcMain.handle("TOGGLE_DEV_TOOLS", async (event, opts) => {
     if (!devtoolsOpen) {
