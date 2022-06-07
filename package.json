@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --linux snap"
+    "dist": "echo 'Plugs dont work use `snapcraft --use-lxd` instead' && exit 1; electron-builder --linux snap",
+    "build:package": "npx electron-packager . --out=out --overwrite --platform=linux --output=release-build --prune=true"
   },
   "devDependencies": {
     "electron": "18.2.4",
@@ -13,9 +14,14 @@
   },
   "snap": {
     "plugs": [
-      "default",
+      "audio-playback",
       "audio-record",
-      "camera"
+      "browser-support",
+      "camera",
+      "desktop",
+      "home",
+      "network",
+      "opengl"
     ]
   }
 }
