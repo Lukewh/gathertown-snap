@@ -1,6 +1,6 @@
 {
   "name": "gathertown",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A better way to meet.",
   "main": "main.js",
   "scripts": {
@@ -10,5 +10,12 @@
   "devDependencies": {
     "electron": "18.2.4",
     "electron-builder": "23.0.3"
+  },
+  "snap": {
+    "plugs": [
+      "default",
+      "audio-record",
+      "camera"
+    ]
   }
 }
