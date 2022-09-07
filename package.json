@@ -9,8 +9,8 @@
     "build:package": "npx electron-packager . --out=out --overwrite --platform=linux --output=release-build --prune=true"
   },
   "devDependencies": {
-    "electron": "18.2.4",
-    "electron-builder": "23.0.3"
+    "electron": "19.0.10",
+    "electron-builder": "23.3.3"
   },
   "snap": {
     "plugs": [

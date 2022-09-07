@@ -1,4 +1,5 @@
 const { ipcRenderer, contextBridge } = require("electron");
+
 const { readFileSync } = require("fs");
 const { join } = require("path");
 
