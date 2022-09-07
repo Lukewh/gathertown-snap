@@ -21,6 +21,7 @@ const createWindow = () => {
     icon: `${__dirname}/gather-logo.svg`,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
     },
     show: false,
     backgroundColor: "rgb(40, 45, 78)",

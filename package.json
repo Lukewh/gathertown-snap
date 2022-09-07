@@ -1,6 +1,6 @@
 {
   "name": "gathertown",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "A better way to meet.",
   "main": "main.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build:package": "npx electron-packager . --out=out --overwrite --platform=linux --output=release-build --prune=true"
   },
   "devDependencies": {
-    "electron": "19.0.10",
+    "electron": "20.1.1",
     "electron-builder": "23.3.3"
   },
   "snap": {
