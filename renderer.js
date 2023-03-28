@@ -20,7 +20,6 @@ navigator.mediaDevices.getDisplayMedia = async () => {
   return stream;
 };
 
-let screenShareBtn = null;
 let virtualShareBtn = null;
 
 const showBtn = (btn) => {
@@ -31,35 +30,32 @@ const hideBtn = (btn) => {
   btn.style.display = "none";
 };
 
-const compareButtons = () => {
-  if (virtualShareBtn && screenShareBtn) {
-    if (virtualShareBtn.className === screenShareBtn.className) {
-      return true;
-    }
+const getScreenShareBtn = () => {
+  const btns = document.querySelectorAll("[aria-label='Screen share']");
+  if (btns.length > 1) {
+    return Array.from(btns).filter((btn) => !btn.dataset.isVirtual)[0];
+  } else if (btns.length === 1) {
+    return btns[0];
   }
-
-  return false;
+  return null;
 };
 
-const getScreenShareBtn = () => {
+const initShareBtn = () => {
+  let screenShareBtn = null;
   if (window.game && window.game.spaceId) {
-    screenShareBtn = document.querySelector("[aria-label='Screen share']");
+    screenShareBtn = getScreenShareBtn();
   }
 
   if (!screenShareBtn) {
-    setTimeout(getScreenShareBtn, 1000);
+    setTimeout(initShareBtn, 1000);
     return;
   }
 
-  const currentVBtn = virtualShareBtn;
-  // replace the element to remove all other listeners
   virtualShareBtn = screenShareBtn.cloneNode(true);
+  virtualShareBtn.dataset.isVirtual = true;
+  console.log(virtualShareBtn);
 
-  if (currentVBtn && currentVBtn.parentNode) {
-    currentVBtn.parentNode.replaceChild(virtualShareBtn, currentVBtn);
-  } else {
-    screenShareBtn.parentNode.appendChild(virtualShareBtn);
-  }
+  screenShareBtn.parentNode.appendChild(virtualShareBtn);
   showBtn(virtualShareBtn);
   hideBtn(screenShareBtn);
 
@@ -70,13 +66,13 @@ const getScreenShareBtn = () => {
 
   screenShareBtn.addEventListener("click", (e) => {
     showBtn(virtualShareBtn);
-    hideBtn(screenShareBtn);
+    hideBtn(getScreenShareBtn());
   });
 
-  setTimeout(getScreenShareBtn, 60 * 1000);
+  //setTimeout(initShareBtn, 60 * 1000);
 };
 
-getScreenShareBtn();
+initShareBtn();
 
 const findTargetByClass = (target, className) => {
   if (target && target.classList && target.classList.contains(className)) {
@@ -91,6 +87,7 @@ const sourceSelector = async () => {
   const selector = buildSourceSelector(sources);
   document.body.appendChild(selector);
   const sourceEls = selector.querySelectorAll(".source");
+  const screenShareBtn = getScreenShareBtn();
   for (const sourceEl of sourceEls) {
     sourceEl.addEventListener("click", (e) => {
       e.stopImmediatePropagation();
@@ -98,6 +95,7 @@ const sourceSelector = async () => {
       const id = target.id;
       sourceId = id;
       selector.parentNode.removeChild(selector);
+      
       screenShareBtn.click();
       showBtn(screenShareBtn);
       hideBtn(virtualShareBtn);
