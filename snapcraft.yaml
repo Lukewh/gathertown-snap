@@ -37,6 +37,7 @@ parts:
         npm install
         npm run build:package
         cp -rv ./out/gathertown-linux-* $SNAPCRAFT_PART_INSTALL/gathertown
+        chmod -R +rx $SNAPCRAFT_PART_INSTALL/gathertown
     build-snaps:
     - node/16/stable
     build-packages:
