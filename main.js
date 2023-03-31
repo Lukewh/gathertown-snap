@@ -18,7 +18,7 @@ const createWindow = () => {
     height: 768,
     title: "Gather | A better way to meet.",
     logo: `${__dirname}/gather-logo.svg`,
-    icon: `${__dirname}/gather-logo.svg`,
+    icon: `${__dirname}/gather-logo.png`,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,

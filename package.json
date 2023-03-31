@@ -1,6 +1,6 @@
 {
   "name": "gathertown",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A better way to meet.",
   "main": "main.js",
   "scripts": {

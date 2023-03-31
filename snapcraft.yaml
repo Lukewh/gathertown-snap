@@ -1,5 +1,5 @@
 name: gathertown
-version: 0.2.6
+version: 0.2.7
 summary: A better way to meet.
 description: |
   Electron wrapper for Gather Town
@@ -37,6 +37,7 @@ parts:
         npm install
         npm run build:package
         cp -rv ./out/gathertown-linux-* $SNAPCRAFT_PART_INSTALL/gathertown
+        chmod -R +rx $SNAPCRAFT_PART_INSTALL/gathertown
     build-snaps:
     - node/16/stable
     build-packages:
