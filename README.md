@@ -5,7 +5,14 @@
 </h1>
 
 <p align="center"><b>An electron wrapper for Gather Town, for linux.</b></p>
-<div align="center"><img src="https://dashboard.snapcraft.io/site_media/appmedia/2022/05/gathertown-screenshot.png" alt="Gather Town screenshot" /></div>
+<div align="center">
+  <img src="https://dashboard.snapcraft.io/site_media/appmedia/2022/05/gathertown-screenshot.png" alt="Gather Town screenshot" />
+</div>
+
+<div align="center">
+  <a href="https://snapcraft.io/gathertown"><img src="https://snapcraft.io/gathertown/badge.svg" alt="gathertown" /></a>
+  <a href="https://snapcraft.io/gathertown"><img src="https://snapcraft.io/gathertown/trending.svg?name=0" alt="gathertown" /></a>
+</div>
 
 ## Introduction
 
