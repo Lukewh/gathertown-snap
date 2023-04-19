@@ -20,8 +20,6 @@ navigator.mediaDevices.getDisplayMedia = async () => {
   return stream;
 };
 
-let virtualShareBtn = null;
-
 const showBtn = (btn) => {
   btn.style.display = "flex";
 };
@@ -40,6 +38,45 @@ const getScreenShareBtn = () => {
   return null;
 };
 
+const getVirtualBtn = () => {
+  const btns = document.querySelectorAll("[aria-label='Screen share']");
+  if (btns.length > 1) {
+    return Array.from(btns).filter((btn) => btn.dataset.isVirtual)[0];
+  }
+  return null;
+};
+
+const setupBtns = () => {
+  const screenShareBtn = getScreenShareBtn();
+  const virtualBtn = getVirtualBtn();
+  if (virtualBtn) {
+    return virtualBtn;
+  }
+  const virtualShareBtn = screenShareBtn.cloneNode(true);
+  virtualShareBtn.dataset.isVirtual = true;
+  virtualShareBtn.title = "Virtual";
+
+  screenShareBtn.title = "Original";
+  screenShareBtn.parentNode.appendChild(virtualShareBtn);
+  showBtn(virtualShareBtn);
+  hideBtn(screenShareBtn);
+
+  virtualShareBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    sourceSelector();
+  });
+
+  screenShareBtn.addEventListener("click", (e) => {
+    setTimeout(() => {
+      setupBtns();
+      showBtn(screenShareBtn);
+      hideBtn(virtualShareBtn);
+    }, 500);
+  });
+
+  return virtualShareBtn;
+};
+
 const initShareBtn = () => {
   let screenShareBtn = null;
   if (window.game && window.game.spaceId) {
@@ -51,25 +88,7 @@ const initShareBtn = () => {
     return;
   }
 
-  virtualShareBtn = screenShareBtn.cloneNode(true);
-  virtualShareBtn.dataset.isVirtual = true;
-  console.log(virtualShareBtn);
-
-  screenShareBtn.parentNode.appendChild(virtualShareBtn);
-  showBtn(virtualShareBtn);
-  hideBtn(screenShareBtn);
-
-  virtualShareBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    sourceSelector();
-  });
-
-  screenShareBtn.addEventListener("click", (e) => {
-    showBtn(virtualShareBtn);
-    hideBtn(getScreenShareBtn());
-  });
-
-  //setTimeout(initShareBtn, 60 * 1000);
+  setupBtns();
 };
 
 initShareBtn();
@@ -87,20 +106,28 @@ const sourceSelector = async () => {
   const selector = buildSourceSelector(sources);
   document.body.appendChild(selector);
   const sourceEls = selector.querySelectorAll(".source");
-  const screenShareBtn = getScreenShareBtn();
   for (const sourceEl of sourceEls) {
     sourceEl.addEventListener("click", (e) => {
       e.stopImmediatePropagation();
       const target = findTargetByClass(e.target, "source");
       const id = target.id;
       sourceId = id;
-      selector.parentNode.removeChild(selector);
-      
+
+      const screenShareBtn = getScreenShareBtn();
+
+      // click this so that it's active
       screenShareBtn.click();
-      showBtn(screenShareBtn);
-      hideBtn(virtualShareBtn);
+
+      setTimeout(() => {
+        showBtn(getScreenShareBtn());
+        hideBtn(getVirtualBtn());
+      }, 500);
+
+      // Remove the selector
+      selector.parentNode.removeChild(selector);
     });
   }
+
   const closeEl = selector.querySelector(".close");
   closeEl.addEventListener("click", (e) => {
     selector.parentNode.removeChild(selector);
