@@ -20,9 +20,6 @@ navigator.mediaDevices.getDisplayMedia = async () => {
   return stream;
 };
 
-let screenShareBtn = null;
-let virtualShareBtn = null;
-
 const showBtn = (btn) => {
   btn.style.display = "flex";
 };
@@ -31,35 +28,36 @@ const hideBtn = (btn) => {
   btn.style.display = "none";
 };
 
-const compareButtons = () => {
-  if (virtualShareBtn && screenShareBtn) {
-    if (virtualShareBtn.className === screenShareBtn.className) {
-      return true;
-    }
+const getScreenShareBtn = () => {
+  const btns = document.querySelectorAll("[aria-label='Screen share']");
+  if (btns.length > 1) {
+    return Array.from(btns).filter((btn) => !btn.dataset.isVirtual)[0];
+  } else if (btns.length === 1) {
+    return btns[0];
   }
-
-  return false;
+  return null;
 };
 
-const getScreenShareBtn = () => {
-  if (window.game && window.game.spaceId) {
-    screenShareBtn = document.querySelector("[aria-label='Screen share']");
+const getVirtualBtn = () => {
+  const btns = document.querySelectorAll("[aria-label='Screen share']");
+  if (btns.length > 1) {
+    return Array.from(btns).filter((btn) => btn.dataset.isVirtual)[0];
   }
+  return null;
+};
 
-  if (!screenShareBtn) {
-    setTimeout(getScreenShareBtn, 1000);
-    return;
+const setupBtns = () => {
+  const screenShareBtn = getScreenShareBtn();
+  const virtualBtn = getVirtualBtn();
+  if (virtualBtn) {
+    return virtualBtn;
   }
+  const virtualShareBtn = screenShareBtn.cloneNode(true);
+  virtualShareBtn.dataset.isVirtual = true;
+  virtualShareBtn.title = "Virtual";
 
-  const currentVBtn = virtualShareBtn;
-  // replace the element to remove all other listeners
-  virtualShareBtn = screenShareBtn.cloneNode(true);
-
-  if (currentVBtn && currentVBtn.parentNode) {
-    currentVBtn.parentNode.replaceChild(virtualShareBtn, currentVBtn);
-  } else {
-    screenShareBtn.parentNode.appendChild(virtualShareBtn);
-  }
+  screenShareBtn.title = "Original";
+  screenShareBtn.parentNode.appendChild(virtualShareBtn);
   showBtn(virtualShareBtn);
   hideBtn(screenShareBtn);
 
@@ -69,14 +67,31 @@ const getScreenShareBtn = () => {
   });
 
   screenShareBtn.addEventListener("click", (e) => {
-    showBtn(virtualShareBtn);
-    hideBtn(screenShareBtn);
+    setTimeout(() => {
+      setupBtns();
+      showBtn(screenShareBtn);
+      hideBtn(virtualShareBtn);
+    }, 500);
   });
 
-  setTimeout(getScreenShareBtn, 60 * 1000);
+  return virtualShareBtn;
 };
 
-getScreenShareBtn();
+const initShareBtn = () => {
+  let screenShareBtn = null;
+  if (window.game && window.game.spaceId) {
+    screenShareBtn = getScreenShareBtn();
+  }
+
+  if (!screenShareBtn) {
+    setTimeout(initShareBtn, 1000);
+    return;
+  }
+
+  setupBtns();
+};
+
+initShareBtn();
 
 const findTargetByClass = (target, className) => {
   if (target && target.classList && target.classList.contains(className)) {
@@ -97,12 +112,22 @@ const sourceSelector = async () => {
       const target = findTargetByClass(e.target, "source");
       const id = target.id;
       sourceId = id;
-      selector.parentNode.removeChild(selector);
+
+      const screenShareBtn = getScreenShareBtn();
+
+      // click this so that it's active
       screenShareBtn.click();
-      showBtn(screenShareBtn);
-      hideBtn(virtualShareBtn);
+
+      setTimeout(() => {
+        showBtn(getScreenShareBtn());
+        hideBtn(getVirtualBtn());
+      }, 500);
+
+      // Remove the selector
+      selector.parentNode.removeChild(selector);
     });
   }
+
   const closeEl = selector.querySelector(".close");
   closeEl.addEventListener("click", (e) => {
     selector.parentNode.removeChild(selector);

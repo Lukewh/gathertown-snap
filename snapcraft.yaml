@@ -1,9 +1,9 @@
 name: gathertown
-version: 0.2.7
+version: 0.2.9
 summary: A better way to meet.
 description: |
   Electron wrapper for Gather Town
-base: core20
+base: core22
 confinement: strict
 grade: stable
 compression: lzo
@@ -12,8 +12,8 @@ architectures:
 
 apps:
   gathertown:
-    command: gathertown/gathertown --no-sandbox
-    extensions: [gnome-3-38]
+    command: out/gathertown-linux-x64/gathertown --no-sandbox
+    extensions: [gnome]
     plugs:
     - browser-support
     - network
@@ -36,10 +36,15 @@ parts:
     override-build: |
         npm install
         npm run build:package
-        cp -rv ./out/gathertown-linux-* $SNAPCRAFT_PART_INSTALL/gathertown
-        chmod -R +rx $SNAPCRAFT_PART_INSTALL/gathertown
+        #cp -rv ./out/gathertown-linux-* $SNAPCRAFT_PART_INSTALL/gathertown
+        #chmod -R +rx $SNAPCRAFT_PART_INSTALL/gathertown
+        chmod -R +xr ./out
+        cp -rv ./out $SNAPCRAFT_PRIME/
+        ls -lh $SNAPCRAFT_PRIME
+        #chmod -R +x $SNAPCRAFT_PRIME/gathertown
+        #ls -lh $SNAPCRAFT_PRIME
     build-snaps:
-    - node/16/stable
+    - node/18/stable
     build-packages:
     - unzip
     stage-packages:
